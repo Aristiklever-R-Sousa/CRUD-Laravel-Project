@@ -18,7 +18,7 @@
                     <select class="form-control" id="exampleFormControlSelect1" name="idDoctor">
                         <option value="" selected>Selecione</option>
                         @foreach($doctors as $doctor)
-                            <option value="{{$doctor->id}}">{{$doctor->name}}</option>
+                            <option value="{{$doctor->id}}">{{$doctor->name}} - {{$doctor->speciality}}</option>
                         @endforeach
                     </select>
                 </div>

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
-    public function login(Request $request) {
+    public static function login(Request $request) {
         $email = $request->email;
         $password = $request->password;
         
@@ -50,7 +50,7 @@ class UsersController extends Controller
 
     }
 
-    public function logout() {
+    public static function logout() {
         @session_start();
         @session_destroy();
         return view('home');

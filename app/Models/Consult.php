@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Consult extends Model
 {
-    public $timestamps = false;
     use HasFactory;
+    
+    public $timestamps = false;
+    protected $table = "consults";
 }

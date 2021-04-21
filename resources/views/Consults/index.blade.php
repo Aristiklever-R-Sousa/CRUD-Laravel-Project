@@ -76,7 +76,7 @@
         Deseja realmente excluir essa consulta?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <a href="../../consults" class="btn btn-secondary" data-dismiss="modal">Cancelar</a>
         <form method="POST" action="{{route('consult.delete', @$id)}}">
             @csrf
             @method('delete')
