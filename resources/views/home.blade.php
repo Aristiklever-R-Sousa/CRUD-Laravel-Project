@@ -11,7 +11,8 @@
 
     <title>Home</title>
 </head>
-<body>    
+<body>
+
 <div class="container">
 	<div class="d-flex justify-content-center h-100">
 		<div class="card">
@@ -24,7 +25,7 @@
 				</div>
 			</div>
 			<div class="card-body">
-				<form id="login-form" method="POST" action="{{ route('user.login') }}">
+				<form id="login-form" method="POST" action="{{ route('user.post.login') }}">
                     @csrf
 					<div class="input-group form-group">
 						<div class="input-group-prepend">

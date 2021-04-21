@@ -7,7 +7,7 @@
   <hr class="my-4">
   <p>Queixas: {{$consult->desc}}</p>
   <p class="lead">
-    <a class="btn btn-primary btn-lg" href="{{route('consults')}}" role="button">Ver Consultas</a>
+    <a class="btn btn-primary btn-lg" href="{{route('consults.get.index')}}" role="button">Ver Consultas</a>
   </p>
 </div>
 @endsection

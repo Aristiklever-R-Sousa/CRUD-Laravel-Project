@@ -30,14 +30,13 @@ class ConsultsController extends Controller
         return view('consults.index', ['consults' => $consults]);
     }
 
-    public function create() {
+    public function insertView() {
         $doctors = DB::table('doctors')
                     ->select('doctors.*')
                     ->get();
         
         return view('consults.create', [
             'doctors' => $doctors
-            // 'createAble' => $createAble
         ]);
     }
 
@@ -48,7 +47,7 @@ class ConsultsController extends Controller
             $request->dateTime == ""
         ) {
             echo "<script> window.alert('Preencha todos os campos para que a consulta seja marcada!') </script>";
-            return $this->create();    
+            return $this->insertView(); 
         }
 
         $consult = new Consult();
@@ -65,18 +64,18 @@ class ConsultsController extends Controller
         
         $consult->save();
 
-        return redirect()->route('consults');
+        return redirect()->route('consults.get.index');
     }
 
-    public function edit($id) {
-        if(is_numeric($id) === false) return redirect()->route('consults');
+    public function updateView($id) {
+        if(is_numeric($id) === false) return redirect()->route('consults.get.index');
 
         $doctorId = DB::table('consults')
                     ->select('consults.doctor')
                     ->where('consults.id', '=', $id)
                     ->get();
 
-        if(count($doctorId) === 0) return redirect()->route('consults');
+        if(count($doctorId) === 0) return redirect()->route('consults.get.index');
 
         $doctorId = $doctorId[0]->doctor;
 
@@ -115,7 +114,7 @@ class ConsultsController extends Controller
             $request->dateTime == ""
         ) {
             echo "<script> window.alert('Preencha todos os campos para que a consulta seja marcada!') </script>";
-            return $this->edit($id);
+            return $this->updateView($id);
         }
 
         $consult = new Consult();
@@ -138,52 +137,11 @@ class ConsultsController extends Controller
             "doctor" => $consult->doctor
         ]);
 
-        return redirect()->route('consults');
-    }
-
-    public function modal($id) {
-        if(is_numeric($id) === false) return redirect()->route('consults');
-        
-        $exist = DB::table('consults')
-                    ->where('consults.id', '=', $id)
-                    ->get();
-        
-        if(count($exist) === 0) return redirect()->route('consults');
-
-        $consults = DB::table('consults')
-                    ->join('doctors', 'doctors.id', '=', 'consults.doctor')
-                    ->select('consults.*', 'doctors.name')
-                    ->orderBy('consults.timeMarked', 'asc')
-                    ->get();
-        
-        foreach($consults as $consult) {
-            $tmp = explode(' ', $consult->timeMarked);
-            $date = explode('-', $tmp[0]);
-            $hour = explode(':', $tmp[1]);
-                        
-            $aux = $date[0];
-            $date[0] = $date[2];
-            $date[2] = $aux;
-                        
-            $consult->timeMarked = "Dia " . implode("/", $date) . " às " . "$hour[0]:$hour[1]";
-        }
-
-        return view('consults.index', [
-            'consults' => $consults,
-            'id' => $id
-        ]);
-    }
-
-    public function delete($id) {
-        DB::table('consults')
-            ->where('consults.id', '=', $id)
-            ->delete();
-
-        return redirect()->route('consults');
+        return redirect()->route('consults.get.index');
     }
 
     public function show($id) {
-        if(is_numeric($id) === false) return redirect()->route('consults');
+        if(is_numeric($id) === false) return redirect()->route('consults.get.index');
         
         $consult = DB::table('consults')
                     ->join('doctors', 'doctors.id', '=', 'consults.doctor')
@@ -191,7 +149,7 @@ class ConsultsController extends Controller
                     ->where('consults.id', '=', $id)
                     ->get();
         
-        if(count($consult) === 0) return redirect()->route('consults');
+        if(count($consult) === 0) return redirect()->route('consults.get.index');
 
         $consult = $consult[0];
 
@@ -207,4 +165,46 @@ class ConsultsController extends Controller
 
         return view('consults.show', ['consult' => $consult]);
     }
+
+    public function deleteView($id) {
+        if(is_numeric($id) === false) return redirect()->route('consults');
+        
+        $exist = DB::table('consults')
+        ->where('consults.id', '=', $id)
+        ->get();
+        
+        if(count($exist) === 0) return redirect()->route('consults');
+        
+        $consults = DB::table('consults')
+                    ->join('doctors', 'doctors.id', '=', 'consults.doctor')
+                    ->select('consults.*', 'doctors.name')
+                    ->orderBy('consults.timeMarked', 'asc')
+                    ->get();
+                    
+        foreach($consults as $consult) {
+            $tmp = explode(' ', $consult->timeMarked);
+            $date = explode('-', $tmp[0]);
+            $hour = explode(':', $tmp[1]);
+                        
+            $aux = $date[0];
+            $date[0] = $date[2];
+            $date[2] = $aux;
+                        
+            $consult->timeMarked = "Dia " . implode("/", $date) . " às " . "$hour[0]:$hour[1]";
+        }
+                    
+        return view('consults.index', [
+            'consults' => $consults,
+            'id' => $id
+        ]);
+    }
+                    
+    public function delete($id) {
+        DB::table('consults')
+            ->where('consults.id', '=', $id)
+            ->delete();
+            
+        return redirect()->route('consults.get.index');
+    }
+                
 }

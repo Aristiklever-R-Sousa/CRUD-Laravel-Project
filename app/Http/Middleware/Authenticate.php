@@ -16,7 +16,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            return view('consults.index');
+            // não consegui utilizar
         }
     }
 }

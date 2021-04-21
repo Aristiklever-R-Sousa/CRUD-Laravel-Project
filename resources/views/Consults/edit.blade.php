@@ -9,7 +9,7 @@
 @section('title', 'Edição de Consulta')
 @section('content')
 <div class="container mt-5">
-    <form method="POST" action="{{ route('consult.update', $consult->id) }}">
+    <form method="POST" action="{{ route('consult.put.update', $consult->id) }}">
         @csrf
         @method('put')
         <div class="row">

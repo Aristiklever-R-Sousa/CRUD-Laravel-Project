@@ -17,21 +17,24 @@ use App\Http\Controllers\UsersController;
 */
 
 Route::group(['middleware' => ['web']], function() {
-    Route::get('/', HomeController::class)->name("home");
 
-    Route::get('/', [UsersController::class, 'logout'])->name("user.logout");
+    Route::get('/', HomeController::class)->name("user.get.login");
+    Route::get('logout', [UsersController::class, 'logout'])->name("user.get.logout");
+    Route::post('login', [UsersController::class, 'login'])->name("user.post.login");
+
 });
 
-Route::get('consult/insert', [ConsultsController::class, 'create'])->name("consult.create");
-Route::get('consults', [ConsultsController::class, 'index'])->name("consults");
-Route::get('consult/{id}', [ConsultsController::class, 'show'])->name("consult.show");
-Route::post('consult/insert', [ConsultsController::class, 'insert'])->name("consult.insert");
-    
-Route::get('consult/{id}/update', [ConsultsController::class, 'edit'])->name("consult.edit");
-Route::put('consult/{id}/update', [ConsultsController::class, 'update'])->name("consult.update");
-    
-Route::get('consult/{id}/delete', [ConsultsController::class, 'modal'])->name("consult.modal");
-Route::delete('consult/{id}', [ConsultsController::class, 'delete'])->name("consult.delete");
-    
-Route::post('consults', [UsersController::class, 'login'])->name("user.login");
-    
+// Route::group(['middleware' => ['web']], function() {});
+// não está funcionando
+
+Route::get('consult/insert', [ConsultsController::class, 'insertView'])->name("consult.get.insert");
+Route::get('consults', [ConsultsController::class, 'index'])->name("consults.get.index");
+Route::get('consult/{id}/show', [ConsultsController::class, 'show'])->name("consult.get.show");
+Route::post('consult/insert', [ConsultsController::class, 'insert'])->name("consult.post.insert");
+        
+Route::get('consult/{id}/update', [ConsultsController::class, 'updateView'])->name("consult.get.update");
+Route::put('consult/{id}/update', [ConsultsController::class, 'update'])->name("consult.put.update");
+        
+Route::get('consult/{id}/remove', [ConsultsController::class, 'deleteView'])->name("consult.get.remove");
+Route::delete('consult/{id}/remove', [ConsultsController::class, 'delete'])->name("consult.delete.remove");
+

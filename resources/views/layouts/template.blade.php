@@ -21,7 +21,7 @@
     <body>
         <!-- NAVBAR -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{{route('user.logout')}}">Home</a>
+            <a class="navbar-brand" href="{{route('user.get.logout')}}">Home</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -29,28 +29,28 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{route('consults')}}">Consultas <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{route('consults.get.index')}}">Consultas <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('consult.create')}}">Marcar Consulta</a>
+                    <a class="nav-link" href="{{route('consult.get.insert')}}">Marcar Consulta</a>
                 </li>
                 <li class="nav-item dropdown">
                     <?php
                         @session_start();
                         if(@$_SESSION['id_user'] == null) {
                     ?>
-                    <a class="nav-link dropdown-toggle" href="{{route('user.login')}}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="{{route('user.post.login')}}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Login
                     </a>
                     <?php } else { ?>
-                    <a class="nav-link dropdown-toggle" href="{{route('user.logout')}}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="{{route('user.get.logout')}}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Logout
                     </a>
                     <?php } ?>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#"><?php echo @$_SESSION['name_user'] ?></a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{route('user.logout')}}">Sair</a>
+                    <a class="dropdown-item" href="{{route('user.get.logout')}}">Sair</a>
                     </div>
                 </li>
                 <!-- <li class="nav-item">

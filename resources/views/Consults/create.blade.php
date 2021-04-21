@@ -9,7 +9,7 @@
 @section('title', 'Criação de Consulta')
 @section('content')
 <div class="container mt-5">
-    <form method="POST" action="{{ route('consult.insert') }}">
+    <form method="POST" action="{{ route('consult.post.insert') }}">
     @csrf
         <div class="row">
             <div class="col-md-4">
