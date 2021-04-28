@@ -1,9 +1,9 @@
 @extends('layouts.template')
 @section('title', 'Consultas')
-@section('css-datetime')
+@section('css')
 <link href="{{ URL::asset('assets/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
-@section('js-datetime')
+@section('js')
 <!-- Scripts DataTables -->
 <script type="text/javascript" src="{{ URL::asset('assets/datatables/jquery.dataTables.min.js')}}"> </script>
 <script type="text/javascript" src="{{ URL::asset('assets/datatables/dataTables.bootstrap4.min.js')}}"></script>
@@ -30,10 +30,10 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                        <th>Médico</th>
-                        <th>Queixa</th>
-                        <th>Data e Hora</th>
-                        <th>Ações</th>
+                            <th>Médico</th>
+                            <th>Queixa</th>
+                            <th>Data e Hora</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
 
@@ -76,7 +76,7 @@
         Deseja realmente excluir essa consulta?
       </div>
       <div class="modal-footer">
-        <button onclick="redirect()" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</a>
+        <button onclick="redirect()" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
         <form method="POST" action="{{route('consult.delete.remove', @$id)}}">
             @csrf
             @method('delete')

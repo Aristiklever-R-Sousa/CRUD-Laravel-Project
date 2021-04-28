@@ -9,6 +9,21 @@
 @section('title', 'Criação de Consulta')
 @section('content')
 <div class="container mt-5">
+@if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show mt-5" role="alert">
+        <ul class="mb-0">
+			<li><strong>{{ $errors->first() }}</strong></li>
+        </ul>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+    </div>
+	<script>
+		setTimeout(function() {
+			$('.alert').alert('close')
+		}, 5000);
+	</script>
+@endif
     <form method="POST" action="{{ route('consult.post.insert') }}">
     @csrf
         <div class="row">
@@ -16,7 +31,7 @@
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">Médico</label>
                     <select class="form-control" id="exampleFormControlSelect1" name="idDoctor">
-                        <option value="" selected>Selecione</option>
+                        <option value="" selected> Selecione </option>
                         @foreach($doctors as $doctor)
                             <option value="{{$doctor->id}}">{{$doctor->name}} - {{$doctor->speciality}}</option>
                         @endforeach
@@ -28,7 +43,8 @@
                     <label for="exampleInputDateTime">Data e Hora</label>
                     <div class="input-group date" data-date="" data-date-format="dd-mm-yyyy HH:ii">
                         <input type="text" id="datetimepicker" class="form-control datetimepicker"
-                            size="16" value="" name="dateTime" placeholder="Data e Hora para a consulta" readonly
+                            name="dateTime" size="16" value="{{ old('dateTime') }}"
+                            placeholder="Data e Hora para a consulta" readonly
                         >
                         <span class="input-group-text" id="basic-addon2">
                             <i class="fas fa-calendar-day"></i>
@@ -52,7 +68,7 @@
         </div>
         <div class="form-group">
             <label for="exampleFormControlTextarea1">Queixa:</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="desc"></textarea>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="desc">{{ old('desc') }}</textarea>
         </div>
         <button type="submit" class="btn btn-primary">Marcar</button>
     </form>

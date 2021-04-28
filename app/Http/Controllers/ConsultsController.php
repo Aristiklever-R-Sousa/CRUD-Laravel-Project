@@ -3,11 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Models\Consult;
+use App\Models\Doctor;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ConsultsController extends Controller
 {
+    private const MESSAGES = [
+        'required' => 'Preencha todos os campos!'
+    ];
+
+    private function formatDate($date, $show = true) {
+        $tmp = explode(' ', $date);
+        
+        if(count($tmp) > 2) $tmp = explode(' ', $tmp[1].' '.$tmp[3]);
+
+        if($show) {
+            $date = explode('-', $tmp[0]);
+            $hour = explode(':', $tmp[1]);
+            
+            $aux = $date[0];
+            $date[0] = $date[2];
+            $date[2] = $aux;
+
+            return "Dia " . implode("/", $date) . " às " . "$hour[0]:$hour[1]";
+        }
+
+        $date = explode('/', $tmp[0]);
+    
+        $aux = $date[0];
+        $date[0] = $date[2];
+        $date[2] = $aux;
+
+        return implode('-', $date) .' '. $tmp[1] . ':00';
+    }
+
     public function index() {
         $consults = DB::table('consults')
                     ->join('doctors', 'doctors.id', '=', 'consults.doctor')
@@ -15,25 +47,15 @@ class ConsultsController extends Controller
                     ->orderBy('consults.timeMarked', 'asc')
                     ->get();
                     
-        foreach($consults as $consult) {
-            $tmp = explode(' ', $consult->timeMarked);
-            $date = explode('-', $tmp[0]);
-            $hour = explode(':', $tmp[1]);
-            
-            $aux = $date[0];
-            $date[0] = $date[2];
-            $date[2] = $aux;
-            
-            $consult->timeMarked = "Dia " . implode("/", $date) . " às " . "$hour[0]:$hour[1]";
-        }
+        foreach($consults as $consult)
+            $consult->timeMarked = $this->formatDate($consult->timeMarked);
 
         return view('consults.index', ['consults' => $consults]);
     }
 
     public function insertView() {
-        $doctors = DB::table('doctors')
-                    ->select('doctors.*')
-                    ->get();
+
+        $doctors = Doctor::all();
         
         return view('consults.create', [
             'doctors' => $doctors
@@ -41,64 +63,64 @@ class ConsultsController extends Controller
     }
 
     public function insert(Request $request) {
-        if(
-            $request->idDoctor == "" ||
-            $request->desc == "" ||
-            $request->dateTime == ""
-        ) {
-            echo "<script> window.alert('Preencha todos os campos para que a consulta seja marcada!') </script>";
-            return $this->insertView(); 
-        }
+        $validatedData = Validator::make(
+            $request->all(),
+            [
+                'idDoctor' => ['bail', 'required'],
+                'desc' => ['bail', 'required'],
+                'dateTime' => ['required']
+            ],
+            ConsultsController::MESSAGES
+        )->validate();
 
         $consult = new Consult();
+        
         $consult->doctor = $request->idDoctor;
         $consult->desc = $request->desc;
-        
-        $tmp = explode(' ', $request->dateTime);
-        $date = explode('/', $tmp[0]);
-        $aux = $date[0];
-        $date[0] = $date[2];
-        $date[2] = $aux;
-
-        $consult->timeMarked = implode('-', $date) .' '. $tmp[1] . ':00';
+        $consult->timeMarked = $this->formatDate($request->dateTime, false);
         
         $consult->save();
 
         return redirect()->route('consults.get.index');
     }
 
+    public function show($id) {
+        if(is_numeric($id) === false) return redirect()->route('consults.get.index');
+        
+        $consult = DB::table('consults')
+                    ->where('consults.id', '=', $id)
+                    ->join('doctors', 'doctors.id', '=', 'consults.doctor')
+                    ->select('consults.*', 'doctors.name', 'doctors.speciality')
+                    ->get();
+        
+        if(count($consult) === 0) return redirect()->route('consults.get.index');
+
+        $consult = $consult[0];
+        $consult->timeMarked = $this->formatDate($consult->timeMarked);
+
+        return view('consults.show', ['consult' => $consult]);
+    }
+
     public function updateView($id) {
         if(is_numeric($id) === false) return redirect()->route('consults.get.index');
 
-        $doctorId = DB::table('consults')
-                    ->select('consults.doctor')
-                    ->where('consults.id', '=', $id)
+        $doctorId = Consult::where('id', $id)
+                    ->select('doctor')
                     ->get();
 
         if(count($doctorId) === 0) return redirect()->route('consults.get.index');
 
         $doctorId = $doctorId[0]->doctor;
 
-        $doctors = DB::table('doctors')
-                    ->select('doctors.*')
-                    ->where('doctors.id', '!=', $doctorId)
-                    ->get();
+        $doctors = Doctor::where('id', '!=', $doctorId)->get();
 
         $consult = DB::table('consults')
                     ->join('doctors', 'doctors.id', '=', 'consults.doctor')
-                    ->select('consults.*', 'doctors.id', 'doctors.name')
+                    ->select('consults.*', 'doctors.id', 'doctors.name', 'doctors.speciality')
                     ->where('consults.id', '=', $id)
                     ->get()[0];
-        
-        $tmp = explode(' ', $consult->timeMarked);
-        $date = explode('-', $tmp[0]);
-        $hour = explode(':', $tmp[1]);
-                        
-        $aux = $date[0];
-        $date[0] = $date[2];
-        $date[2] = $aux;
-                        
-        $consult->timeMarked = implode("/", $date) . " " . "$hour[0]:$hour[1]";
+
+        $consult->timeMarked = $this->formatDate($consult->timeMarked);
         $consult->id = $id;
 
         return view('consults.edit', [
@@ -108,72 +130,35 @@ class ConsultsController extends Controller
     }
 
     public function update(Request $request, $id) {
-        if(
-            $request->idDoctor == "" ||
-            $request->desc == "" ||
-            $request->dateTime == ""
-        ) {
-            echo "<script> window.alert('Preencha todos os campos para que a consulta seja marcada!') </script>";
-            return $this->updateView($id);
-        }
+        $validatedData = Validator::make(
+            $request->all(),
+            [
+                'idDoctor' => ['bail', 'required'],
+                'desc' => ['bail', 'required'],
+                'dateTime' => ['required']
+            ],
+            ConsultsController::MESSAGES
+        )->validate();
 
-        $consult = new Consult();
-        $consult->doctor = $request->idDoctor;
-        $consult->desc = $request->desc;
+        $doctor = $request->idDoctor;
+        $desc = $request->desc;
+        $timeMarked = $this->formatDate($request->dateTime, false);
         
-        $tmp = explode(' ', $request->dateTime);
-        $date = explode('/', $tmp[0]);
-        $aux = $date[0];
-        $date[0] = $date[2];
-        $date[2] = $aux;
-
-        $consult->timeMarked = implode('-', $date) .' '. $tmp[1] . ':00';
-
-        DB::table('consults')
-        ->where('consults.id', '=', $id)
-        ->update([
-            "desc" => $consult->desc,
-            "timeMarked" => $consult->timeMarked,
-            "doctor" => $consult->doctor
+        Consult::where('id', $id)->update([
+            "desc" => $desc,
+            "timeMarked" => $timeMarked,
+            "doctor" => $doctor
         ]);
 
         return redirect()->route('consults.get.index');
     }
 
-    public function show($id) {
+    public function deleteView($id) {
         if(is_numeric($id) === false) return redirect()->route('consults.get.index');
         
-        $consult = DB::table('consults')
-                    ->join('doctors', 'doctors.id', '=', 'consults.doctor')
-                    ->select('consults.*', 'doctors.name', 'doctors.speciality')
-                    ->where('consults.id', '=', $id)
-                    ->get();
-        
-        if(count($consult) === 0) return redirect()->route('consults.get.index');
+        $exist = Consult::where('id', $id)->get();
 
-        $consult = $consult[0];
-
-        $tmp = explode(' ', $consult->timeMarked);
-        $date = explode('-', $tmp[0]);
-        $hour = explode(':', $tmp[1]);
-                        
-        $aux = $date[0];
-        $date[0] = $date[2];
-        $date[2] = $aux;
-                        
-        $consult->timeMarked = "Dia " . implode("/", $date) . " às " . "$hour[0]:$hour[1]";
-
-        return view('consults.show', ['consult' => $consult]);
-    }
-
-    public function deleteView($id) {
-        if(is_numeric($id) === false) return redirect()->route('consults');
-        
-        $exist = DB::table('consults')
-        ->where('consults.id', '=', $id)
-        ->get();
-        
-        if(count($exist) === 0) return redirect()->route('consults');
+        if(count($exist) === 0) return redirect()->route('consults.get.index');
         
         $consults = DB::table('consults')
                     ->join('doctors', 'doctors.id', '=', 'consults.doctor')
@@ -181,17 +166,8 @@ class ConsultsController extends Controller
                     ->orderBy('consults.timeMarked', 'asc')
                     ->get();
                     
-        foreach($consults as $consult) {
-            $tmp = explode(' ', $consult->timeMarked);
-            $date = explode('-', $tmp[0]);
-            $hour = explode(':', $tmp[1]);
-                        
-            $aux = $date[0];
-            $date[0] = $date[2];
-            $date[2] = $aux;
-                        
-            $consult->timeMarked = "Dia " . implode("/", $date) . " às " . "$hour[0]:$hour[1]";
-        }
+        foreach($consults as $consult)
+            $consult->timeMarked = $this->formatDate($consult->timeMarked);
                     
         return view('consults.index', [
             'consults' => $consults,
@@ -200,9 +176,7 @@ class ConsultsController extends Controller
     }
                     
     public function delete($id) {
-        DB::table('consults')
-            ->where('consults.id', '=', $id)
-            ->delete();
+        Consult::where('id', $id)->delete();
             
         return redirect()->route('consults.get.index');
     }

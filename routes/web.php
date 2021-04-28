@@ -24,9 +24,6 @@ Route::group(['middleware' => ['web']], function() {
 
 });
 
-// Route::group(['middleware' => ['web']], function() {});
-// não está funcionando
-
 Route::get('consult/insert', [ConsultsController::class, 'insertView'])->name("consult.get.insert");
 Route::get('consults', [ConsultsController::class, 'index'])->name("consults.get.index");
 Route::get('consult/{id}/show', [ConsultsController::class, 'show'])->name("consult.get.show");

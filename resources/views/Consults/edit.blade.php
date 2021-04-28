@@ -9,6 +9,21 @@
 @section('title', 'Edição de Consulta')
 @section('content')
 <div class="container mt-5">
+@if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show mt-5" role="alert">
+        <ul class="mb-0">
+			<li><strong>{{ $errors->first() }}</strong></li>
+        </ul>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+    </div>
+	<script>
+		setTimeout(function() {
+			$('.alert').alert('close')
+		}, 5000);
+	</script>
+@endif
     <form method="POST" action="{{ route('consult.put.update', $consult->id) }}">
         @csrf
         @method('put')
@@ -17,9 +32,9 @@
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">Médico</label>
                     <select class="form-control" id="exampleFormControlSelect1" name="idDoctor">
-                        <option value="{{$consult->doctor}}" selected>{{$consult->name}}</option>
+                        <option value="{{$consult->doctor}}" selected>{{$consult->name}} - {{$consult->speciality}}</option>
                         @foreach($doctors as $doctor)
-                            <option value="{{$doctor->id}}">{{$doctor->name}}</option>
+                            <option value="{{$doctor->id}}">{{$doctor->name}} - {{$doctor->speciality}}</option>
                         @endforeach
                     </select>
                 </div>

@@ -4,23 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
-    public static function login(Request $request) {
-        if(
-            $request->email == "" ||
-            $request->password == ""
-        ) {
-            echo "<script> window.alert('Email ou senha não foram informados!') </script>";
-            return view('home');
-        }
+    private const MESSAGES = [
+        'required' => 'Preencha todos os campos!'
+    ];
 
-        $email = $request->email;
-        $password = $request->password;
+    public static function login(Request $request) {
+        $validatedData = Validator::make(
+            $request->all(),
+            [
+                'email' => ['bail', 'required'],
+                'password' => ['required']
+            ],
+            UsersController::MESSAGES
+        )->validate();
         
-        $user = User::where('email', $email)
-                ->where('password', $password)
+        $user = User::where('email', $request->email)
+                ->where('password', $request->password)
                 ->get();
         
         if(count($user) > 0) {
@@ -32,8 +35,9 @@ class UsersController extends Controller
             return redirect()->route('consults.get.index');
         }
 
-        echo "<script language='javascript'> window.alert('Dados Incorretos!')</script>";
-        return view('home');
+        return view('home', [
+            'error' => "Email ou senha informados estão incorretos!"
+        ]);
 
     }
 

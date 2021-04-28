@@ -1,18 +1,37 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-
-    <link href="{{ URL::asset('assets/style.css') }}" rel="stylesheet">
-
-    <title>Home</title>
-</head>
-<body>
-
+@extends('layouts.templateLogin')
+@section('css')
+<link href="{{ URL::asset('assets/style.css') }}" rel="stylesheet">
+@endsection
+@section('title', 'Home')
+@section('content')
+@if (isset($error))
+	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		<strong>{{ $error }}</strong>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<script>
+		setTimeout(function() {
+			$('.alert').alert('close')
+		}, 5000);
+	</script>
+@endif
+@if ($errors->any())
+<div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+        <ul class="mb-0">
+			<li><strong>{{ $errors->first() }}</strong></li>
+        </ul>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+    </div>
+	<script>
+		setTimeout(function() {
+			$('.alert').alert('close')
+		}, 5000);
+	</script>
+@endif
 <div class="container">
 	<div class="d-flex justify-content-center h-100">
 		<div class="card">
@@ -59,5 +78,4 @@
 		</div>
 	</div>
 </div>
-</body>
-</html>
+@endsection
