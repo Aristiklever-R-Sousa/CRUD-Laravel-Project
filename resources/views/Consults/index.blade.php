@@ -11,11 +11,6 @@
 @endsection
 @section('content')
 <?php
-    @session_start();
-    if(@$_SESSION['id_user'] == NULL) {
-        echo "<script>window.location='./'</script>";
-    }
-
     if(!isset($id)) {
         $id = "";
     }

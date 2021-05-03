@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ConsultsController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UsersController;
 
 /*
@@ -19,19 +20,23 @@ use App\Http\Controllers\UsersController;
 Route::group(['middleware' => ['web']], function() {
 
     Route::get('/', HomeController::class)->name("user.get.login");
-    Route::get('logout', [UsersController::class, 'logout'])->name("user.get.logout");
-    Route::post('login', [UsersController::class, 'login'])->name("user.post.login");
+    Route::get('logout', [LoginController::class, 'logout'])->name("user.get.logout");
+    Route::post('login', [LoginController::class, 'authenticate'])->name("user.post.login");
 
 });
 
-Route::get('consult/insert', [ConsultsController::class, 'insertView'])->name("consult.get.insert");
-Route::get('consults', [ConsultsController::class, 'index'])->name("consults.get.index");
-Route::get('consult/{id}/show', [ConsultsController::class, 'show'])->name("consult.get.show");
-Route::post('consult/insert', [ConsultsController::class, 'insert'])->name("consult.post.insert");
-        
-Route::get('consult/{id}/update', [ConsultsController::class, 'updateView'])->name("consult.get.update");
-Route::put('consult/{id}/update', [ConsultsController::class, 'update'])->name("consult.put.update");
-        
-Route::get('consult/{id}/remove', [ConsultsController::class, 'deleteView'])->name("consult.get.remove");
-Route::delete('consult/{id}/remove', [ConsultsController::class, 'delete'])->name("consult.delete.remove");
+Route::group(['middleware' => ['auth']], function() {
+
+    Route::get('consult/insert', [ConsultsController::class, 'insertView'])->name("consult.get.insert");
+    Route::get('consults', [ConsultsController::class, 'index'])->name("consults.get.index");
+    Route::get('consult/{id}/show', [ConsultsController::class, 'show'])->name("consult.get.show");
+    Route::post('consult/insert', [ConsultsController::class, 'insert'])->name("consult.post.insert");
+            
+    Route::get('consult/{id}/update', [ConsultsController::class, 'updateView'])->name("consult.get.update");
+    Route::put('consult/{id}/update', [ConsultsController::class, 'update'])->name("consult.put.update");
+            
+    Route::get('consult/{id}/remove', [ConsultsController::class, 'deleteView'])->name("consult.get.remove");
+    Route::delete('consult/{id}/remove', [ConsultsController::class, 'delete'])->name("consult.delete.remove");
+
+});
 

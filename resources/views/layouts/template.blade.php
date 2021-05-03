@@ -34,20 +34,14 @@
                     <a class="nav-link" href="{{route('consult.get.insert')}}">Marcar Consulta</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <?php
-                        @session_start();
-                        if(@$_SESSION['id_user'] == null) {
-                    ?>
-                    <a class="nav-link dropdown-toggle" href="{{route('user.post.login')}}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Login
+                    <a class="nav-link dropdown-toggle"
+                        href="{{route('user.get.logout')}}" id="navbarDropdown"
+                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    >
+                        Logout
                     </a>
-                    <?php } else { ?>
-                    <a class="nav-link dropdown-toggle" href="{{route('user.get.logout')}}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Logout
-                    </a>
-                    <?php } ?>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#"><?php echo @$_SESSION['name_user'] ?></a>
+                    <a class="dropdown-item" href="#">{{ Auth::user()->name }}</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{route('user.get.logout')}}">Sair</a>
                     </div>

@@ -1,4 +1,4 @@
-@extends('layouts.templateLogin')
+@extends('layouts.template-login')
 @section('css')
 <link href="{{ URL::asset('assets/style.css') }}" rel="stylesheet">
 @endsection
