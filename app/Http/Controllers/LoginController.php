@@ -26,14 +26,6 @@ class LoginController extends Controller
             LoginController::MESSAGES
         )->validate();
 
-        // return print_r(json_encode([
-        //    'Pass?' => Hash::make($request->password),
-        //    'Accepted?' => Auth::attempt([
-        //                     'email' => $request->email,
-        //                     'password' => $request->password
-        //                 ])
-        // ]));
-        // Auth::attempt($credentials)
         if (Auth::attempt([
                 'email' => $request->email,
                 'password' => $request->password
@@ -42,7 +34,7 @@ class LoginController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->intended('consults');
+            return redirect()->intended('view/consults');
         }
 
         return back()->withErrors([

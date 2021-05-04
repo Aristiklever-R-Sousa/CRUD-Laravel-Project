@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('view.layouts.index')
 @section('title', 'Consultas')
 @section('css')
 <link href="{{ URL::asset('assets/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -16,7 +16,7 @@
     }
 ?>
 <div class="container">
-    <a href="{{route('consult.get.insert')}}" type="button" class="mt-4 mb-4 btn btn-primary">Marcar Consulta</a>
+    <a href="{{route('consult.get.new')}}" type="button" class="mt-4 mb-4 btn btn-primary">Marcar Consulta</a>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -39,9 +39,9 @@
                             <td>{{$consult->desc}}</td>
                             <td>{{$consult->timeMarked}}</td>
                             <td>
-                                <a class="ml-1" title="Detalhes da Consulta" href="{{route('consult.get.show', $consult->id)}}"><i class="fas fa-eye text-primary"></i></a>
-                                <a class="ml-1" title="Editar Consulta" href="{{route('consult.get.update', $consult->id)}}"><i class="fas fa-edit text-info"></i></a>
-                                <a href="{{route('consult.get.remove', $consult->id)}}"  class="ml-1" title="Excluir Consulta"><i class="fas fa-trash text-danger"></i></a>
+                                <a class="ml-1" title="Detalhes da Consulta" href="{{route('consult.get.view', $consult->id)}}"><i class="fas fa-eye text-primary"></i></a>
+                                <a class="ml-1" title="Editar Consulta" href="{{route('consult.get.edit', $consult->id)}}"><i class="fas fa-edit text-info"></i></a>
+                                <a href="{{route('consult.get.delete', $consult->id)}}"  class="ml-1" title="Excluir Consulta"><i class="fas fa-trash text-danger"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -72,7 +72,7 @@
       </div>
       <div class="modal-footer">
         <button onclick="redirect()" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        <form method="POST" action="{{route('consult.delete.remove', @$id)}}">
+        <form method="POST" action="{{route('consult.delete.delete', @$id)}}">
             @csrf
             @method('delete')
             <button type="submit" class="btn btn-danger">Excluir</button>
@@ -84,7 +84,7 @@
 
 <script>
     var redirect = () => {
-        window.location = "{{route('consults.get.index')}}";
+        window.location = "{{route('consults.get.view')}}";
     }
 </script>
 

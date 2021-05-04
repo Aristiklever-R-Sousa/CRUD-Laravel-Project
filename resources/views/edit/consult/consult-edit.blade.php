@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('view.layouts.index')
 @section('css')
 <link href="{{ URL::asset('assets/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 @endsection
@@ -6,7 +6,7 @@
 <script src="{{ URL::asset('assets/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js') }}"> </script>
 <script src="{{ URL::asset('assets/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.pt-BR.js') }}"> </script>
 @endsection
-@section('title', 'Criação de Consulta')
+@section('title', 'Edição de Consulta')
 @section('content')
 <div class="container mt-5">
 @if ($errors->any())
@@ -24,27 +24,27 @@
 		}, 5000);
 	</script>
 @endif
-    <form method="POST" action="{{ route('consult.post.insert') }}">
-    @csrf
+    <form method="POST" action="{{ route('consult.put.edit', $consult->id) }}">
+        @csrf
+        @method('put')
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">Médico</label>
                     <select class="form-control" id="exampleFormControlSelect1" name="idDoctor">
-                        <option value="" selected> Selecione </option>
+                        <option value="{{$consult->doctor}}" selected>{{$consult->name}} - {{$consult->speciality}}</option>
                         @foreach($doctors as $doctor)
                             <option value="{{$doctor->id}}">{{$doctor->name}} - {{$doctor->speciality}}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="form-group">
                     <label for="exampleInputDateTime">Data e Hora</label>
-                    <div class="input-group date" data-date="" data-date-format="dd-mm-yyyy HH:ii">
+                    <div class="input-group date" data-date="{{$consult->timeMarked}}" data-date-format="dd-mm-yyyy HH:ii">
                         <input type="text" id="datetimepicker" class="form-control datetimepicker"
-                            name="dateTime" size="16" value="{{ old('dateTime') }}"
-                            placeholder="Data e Hora para a consulta" readonly
+                            size="16" value="{{$consult->timeMarked}}" name="dateTime" placeholder="Data e Hora para a consulta" readonly
                         >
                         <span class="input-group-text" id="basic-addon2">
                             <i class="fas fa-calendar-day"></i>
@@ -68,9 +68,9 @@
         </div>
         <div class="form-group">
             <label for="exampleFormControlTextarea1">Queixa:</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="desc">{{ old('desc') }}</textarea>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="desc">{{$consult->desc}}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Marcar</button>
+        <button type="submit" class="btn btn-primary">Salvar Mudanças</button>
     </form>
 </div>
 @endsection

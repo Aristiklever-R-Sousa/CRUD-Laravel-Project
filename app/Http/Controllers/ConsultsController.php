@@ -50,14 +50,14 @@ class ConsultsController extends Controller
         foreach($consults as $consult)
             $consult->timeMarked = $this->formatDate($consult->timeMarked);
 
-        return view('consults.index', ['consults' => $consults]);
+        return view('view.consult.consult-index', ['consults' => $consults]);
     }
 
     public function insertView() {
 
         $doctors = Doctor::all();
         
-        return view('consults.create', [
+        return view('new.consult.consult-new', [
             'doctors' => $doctors
         ]);
     }
@@ -81,7 +81,7 @@ class ConsultsController extends Controller
         
         $consult->save();
 
-        return redirect()->route('consults.get.index');
+        return redirect()->route('consults.get.view');
     }
 
     public function show($id) {
@@ -98,7 +98,7 @@ class ConsultsController extends Controller
         $consult = $consult[0];
         $consult->timeMarked = $this->formatDate($consult->timeMarked);
 
-        return view('consults.show', ['consult' => $consult]);
+        return view('view.consult.consult-view', ['consult' => $consult]);
     }
 
     public function updateView($id) {
@@ -123,7 +123,7 @@ class ConsultsController extends Controller
         $consult->timeMarked = $this->formatDate($consult->timeMarked);
         $consult->id = $id;
 
-        return view('consults.edit', [
+        return view('edit.consult.consult-edit', [
             'consult' => $consult,
             'doctors' => $doctors
         ]);
@@ -150,7 +150,7 @@ class ConsultsController extends Controller
             "doctor" => $doctor
         ]);
 
-        return redirect()->route('consults.get.index');
+        return redirect()->route('consults.get.view');
     }
 
     public function deleteView($id) {
@@ -169,7 +169,7 @@ class ConsultsController extends Controller
         foreach($consults as $consult)
             $consult->timeMarked = $this->formatDate($consult->timeMarked);
                     
-        return view('consults.index', [
+        return view('view.consult.consult-index', [
             'consults' => $consults,
             'id' => $id
         ]);
@@ -178,7 +178,7 @@ class ConsultsController extends Controller
     public function delete($id) {
         Consult::where('id', $id)->delete();
             
-        return redirect()->route('consults.get.index');
+        return redirect()->route('consults.get.view');
     }
                 
 }
