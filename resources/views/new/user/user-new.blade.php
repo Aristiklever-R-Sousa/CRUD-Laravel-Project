@@ -2,7 +2,7 @@
 @section('css')
 <link href="{{ URL::asset('assets/style.css') }}" rel="stylesheet">
 @endsection
-@section('title', 'Home')
+@section('title', 'Cadastro de Usuário')
 @section('content')
 @if (isset($error))
 	<div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -36,7 +36,7 @@
 	<div class="d-flex justify-content-center h-100">
 		<div class="card">
 			<div class="card-header">
-				<h3>Log In</h3>
+				<h3>Cadastro</h3>
 				<div class="d-flex justify-content-end social_icon">
 					<span><i class="fab fa-facebook-square"></i></span>
 					<span><i class="fab fa-google-plus-square"></i></span>
@@ -44,36 +44,43 @@
 				</div>
 			</div>
 			<div class="card-body">
-				<form id="login-form" method="POST" action="{{ route('user.post.login') }}">
+				<form id="login-form" method="POST" action="{{ route('user.post.new') }}">
                     @csrf
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-user"></i></span>
 						</div>
-						<input type="text" class="form-control" placeholder="Usuário" id="email" name="email">
+						<input type="text" class="form-control" placeholder="Nome" id="name" name="name">
+						
+					</div>
+					<div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-envelope"></i></span>
+						</div>
+						<input type="text" class="form-control" placeholder="Email" id="email" name="email">
 						
 					</div>
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-key"></i></span>
 						</div>
-						<input type="password" class="form-control" placeholder="Senha" id="password" name="password">
+						<input type="password" class="form-control" placeholder="Informe sua senha" id="password" name="password">
 					</div>
-					<!-- <div class="row align-items-center remember">
-						<input type="checkbox">Lembrar de mim
-					</div> -->
+					<div class="input-group form-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fas fa-key"></i></span>
+						</div>
+						<input type="password" class="form-control" placeholder="Comfirme sua senha" id="password-confirm" name="password-confirm">
+					</div>
 					<div class="form-group">
-						<input type="submit" value="Entrar" class="btn float-right login_btn">
+						<input type="submit" value="Cadastrar" class="btn float-right register_btn">
 					</div>
 				</form>
 			</div>
 			<div class="card-footer">
 				<div class="d-flex justify-content-center links">
-					Não tem uma conta?<a href="{{ route('user.get.new') }}">Cadastre-se</a>
+					Já tem uma conta?<a href="{{ route('home.get') }}">Entre</a>
 				</div>
-				<!-- <div class="d-flex justify-content-center">
-					<a href="#">Esqueceu sua senha?</a>
-				</div> -->
 			</div>
 		</div>
 	</div>

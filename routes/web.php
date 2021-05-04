@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{ HomeController, ConsultsController, LoginController };
+use App\Http\Controllers\{ HomeController, ConsultsController, LoginController, UserController };
 
 
 Route::group(['middleware' => ['web']], function() {
@@ -9,6 +9,8 @@ Route::group(['middleware' => ['web']], function() {
     Route::get('/', HomeController::class)->name("home.get");
     Route::get('logout/user', [LoginController::class, 'logout'])->name("user.get.logout");
     Route::post('login/user', [LoginController::class, 'authenticate'])->name("user.post.login");
+    Route::get('new/user', [UserController::class, 'insertView'])->name("user.get.new");
+    Route::post('new/user', [UserController::class, 'insert'])->name("user.post.new");
 
 });
 

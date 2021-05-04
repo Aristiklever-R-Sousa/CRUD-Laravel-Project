@@ -1,3 +1,15 @@
+## CRUD simples de consultas médicas
+
+Nesse sistema simples, para que tudo possa testá-lo em sua máquina, faça o seguinte:
+[Assumindo que você já tenha feito o fork do projeto ou já tenha realizado o download dos arquivos em sua máquina]
+
+- Execute o SQL com as inserções na tabela doctors;
+- Após isso, já pode estar utilizando o sistema.
+
+Esse sistema possui um mini cadastro de usuários e, relacionado a cada usuário, possuímos consultas, que podem ser cadastro por eles individualmente.
+Uma consulta de um usuário X não irá aparecer dentre as consultas do usuário Y.
+
+<br/><hr>
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">

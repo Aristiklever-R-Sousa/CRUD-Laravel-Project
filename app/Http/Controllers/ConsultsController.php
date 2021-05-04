@@ -6,6 +6,7 @@ use App\Models\Consult;
 use App\Models\Doctor;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -42,6 +43,7 @@ class ConsultsController extends Controller
 
     public function index() {
         $consults = DB::table('consults')
+                    ->where('user', '=', Auth::user()->id)
                     ->join('doctors', 'doctors.id', '=', 'consults.doctor')
                     ->select('consults.*', 'doctors.name')
                     ->orderBy('consults.timeMarked', 'asc')
@@ -76,6 +78,7 @@ class ConsultsController extends Controller
         $consult = new Consult();
         
         $consult->doctor = $request->idDoctor;
+        $consult->user = Auth::user()->id;
         $consult->desc = $request->desc;
         $consult->timeMarked = $this->formatDate($request->dateTime, false);
         
@@ -88,6 +91,7 @@ class ConsultsController extends Controller
         if(is_numeric($id) === false) return redirect()->route('consults.get.index');
         
         $consult = DB::table('consults')
+                    ->where('user', '=', Auth::user()->id)
                     ->where('consults.id', '=', $id)
                     ->join('doctors', 'doctors.id', '=', 'consults.doctor')
                     ->select('consults.*', 'doctors.name', 'doctors.speciality')
@@ -115,6 +119,7 @@ class ConsultsController extends Controller
         $doctors = Doctor::where('id', '!=', $doctorId)->get();
 
         $consult = DB::table('consults')
+                    ->where('user', '=', Auth::user()->id)
                     ->join('doctors', 'doctors.id', '=', 'consults.doctor')
                     ->select('consults.*', 'doctors.id', 'doctors.name', 'doctors.speciality')
                     ->where('consults.id', '=', $id)
@@ -161,6 +166,7 @@ class ConsultsController extends Controller
         if(count($exist) === 0) return redirect()->route('consults.get.index');
         
         $consults = DB::table('consults')
+                    ->where('user', '=', Auth::user()->id)
                     ->join('doctors', 'doctors.id', '=', 'consults.doctor')
                     ->select('consults.*', 'doctors.name')
                     ->orderBy('consults.timeMarked', 'asc')

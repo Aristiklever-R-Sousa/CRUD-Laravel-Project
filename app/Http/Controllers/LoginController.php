@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
@@ -25,13 +23,15 @@ class LoginController extends Controller
             ],
             LoginController::MESSAGES
         )->validate();
-
-        if (Auth::attempt([
-                'email' => $request->email,
-                'password' => $request->password
-            ])
-        ) {
-
+        
+        // return print_r(json_encode([
+        //     'password' => $request->password,
+        //     'Hashed' => Hash::make(request('password')),
+        //     'isValid' => Auth::attempt(['email' => request('email') , 'password' => request('password')])
+        // ]));
+        
+        if ( Auth::attempt(['email' => request('email'), 'password' => request('password')]) ) {
+        
             $request->session()->regenerate();
 
             return redirect()->intended('view/consults');

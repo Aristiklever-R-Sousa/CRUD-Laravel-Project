@@ -16,7 +16,6 @@ align-content: center;
 }
 
 .card{
-height: 370px;
 margin-top: auto;
 margin-bottom: auto;
 width: 400px;
@@ -78,6 +77,17 @@ width: 100px;
 .login_btn:hover{
 color: black;
 background-color: white;
+}
+
+.register_btn{
+    color: black;
+    background-color: #FFC312;
+    width: 110px;
+}
+    
+.register_btn:hover{
+    color: black;
+    background-color: white;
 }
 
 .links{
