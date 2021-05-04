@@ -1,6 +1,6 @@
 ## CRUD simples de consultas médicas
 
-Nesse sistema simples, para que tudo possa testá-lo em sua máquina, faça o seguinte:
+Nesse sistema simples, para que tudo possa testá-lo em sua máquina, faça o seguinte: <br/>
 [Assumindo que você já tenha feito o fork do projeto ou já tenha realizado o download dos arquivos em sua máquina]
 
 - Execute o SQL com as inserções na tabela doctors;
