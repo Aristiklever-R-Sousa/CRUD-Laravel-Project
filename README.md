@@ -27,4 +27,6 @@ Uma consulta de um usuário X não irá aparecer dentre as consultas do usuário
 Quer conhecer sobre esse magnífico framework (e ler sobre as informações da nova versão)?<br/'>
 Aqui na [documentação oficial](httph://laravel.com/docs) você pode encontra tudo que precisar.
 
+<hr></hr>
+
 <p align="center">Feito com muito ❤️ por mim, Aristiklever R. Sousa 😊.</p>
