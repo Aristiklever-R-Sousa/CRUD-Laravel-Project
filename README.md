@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-<h1 align="center"> CRUD Simples de Consultas Médicas com Laravel e MySQL </h1>
+<h1 align="center"> CRUD Simples de Consultas Médicas <br/> Com Laravel e MySQL </h1>
 <br/>
 
 ## Sobre esse Projeto
